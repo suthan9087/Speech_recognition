@@ -1,0 +1,80 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <title>Voice Search</title> 
+    <style> 
+         body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #f2b1fd, #99e0f4); 
+            color: #333; 
+            text-align: center; 
+            margin: 0; 
+            padding: 0; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+        } 
+ 
+        h1 { 
+            font-size: 3rem; 
+            margin-bottom: 30px; 
+            color: #3d234a; 
+        } 
+ 
+        button { 
+            padding: 12px 30px; 
+            font-size: 1.2rem; 
+            border: none; 
+            border-radius: 30px; 
+            background-color: #6b5097; 
+            color: white; 
+            box-shadow: 0 8px 16px rgba(195, 177, 225, 0.4); 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+        } 
+ 
+        button:hover { 
+            background-color: #845383; 
+            box-shadow: 0 20px 20px rgba(155, 100, 222, 0.5); 
+            transform: scale(1.05); 
+        } 
+ 
+    </style> 
+</head> 
+<body> 
+    <h1>Voice Search</h1> 
+    <button onclick="startListening()">Start Speaking</button> 
+     <p id="output"></p> 
+     <div id="history"> 
+        <h3>          Search History:</h3> 
+        <ul id="history-list"></ul> 
+    </div> 
+    <script> 
+        function startListening() { 
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)(); 
+            recognition.lang = 'en-US'; 
+            recognition.start(); 
+ 
+            recognition.onresult = function(event) { 
+                const query = event.results[0][0].transcript; 
+                document.getElementById('output').textContent = `You said: ${query}`; 
+                addToHistory(query); 
+                window.open(`https://www.bing.com/search?q=${encodeURIComponent(query)}`, 
+'_blank'); 
+            }; 
+ 
+            recognition.onerror = function(event) { 
+                document.getElementById('output').textContent = 'Error: ' + event.error; 
+            }; 
+            function addToHistory(query) { 
+    const li = document.createElement('li'); 
+    li.textContent = query; 
+    document.getElementById('history-list').prepend(li); 
+} 
+        } 
+    </script> 
+</body> 
+</html> 
